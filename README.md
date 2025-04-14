@@ -1,6 +1,6 @@
 # 📚 Book tracking app
 
-** An electronic desktop application for managing your book collection**  
+**An electronic desktop application for managing your book collection**  
 *Book tracking, space organization, convenient sorting and import/export via xml*
 
 ![App Screenshot](screenshot.png)
@@ -41,7 +41,6 @@ yarn install
 
 ```bash
 yarn dev
-Production build:
 ```
 
 **Production build:**
