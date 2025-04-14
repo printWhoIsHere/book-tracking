@@ -1,11 +1,12 @@
 plugins:
-  - prettier-plugin-tailwindcsssemi: false
+  - prettier-plugin-tailwindcss: false
 
 tailwindConfig: './tailwind.config.js'
 
 tailwindFunctions: ['clsx', 'cn']
 tailwindAttributes: ['class', 'className']
 
+semi: false
 useTabs: true
 singleQuote: true
 bracketSpacing: true
