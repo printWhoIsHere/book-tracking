@@ -1,5 +1,6 @@
 import Header from '@/components/shared/Header'
 import Sidebar, { SidebarInset } from '@/components/shared/Sidebar'
+import { Toaster } from '@/components/ui/toaster'
 
 export default function App(): JSX.Element {
 	return (
@@ -8,8 +9,10 @@ export default function App(): JSX.Element {
 
 			<SidebarInset>
 				<Header />
-				<main className='p-4'>main</main>
+				<>TABLE</>
 			</SidebarInset>
+
+			<Toaster />
 		</>
 	)
 }
