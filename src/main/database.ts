@@ -4,26 +4,31 @@ import { databasePath } from './config'
 const db = new Database(databasePath)
 // TODO: Функция создания резервных копий
 
-db.exec(`
+try {
+	db.exec(`
     CREATE TABLE IF NOT EXISTS books (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        title TEXT NOT NULL,
-        totalVolumes INTEGER,
-        currentVolume INTEGER,
-        lastName TEXT,
-        firstName TEXT,
-        middleName TEXT,
-        genre TEXT,
-        content TEXT,
-        annotation TEXT,
-        year INTEGER,
-        tags TEXT
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      totalVolumes INTEGER,
+      currentVolume INTEGER,
+      lastName TEXT,
+      firstName TEXT,
+      middleName TEXT,
+      genre TEXT,
+      content TEXT,
+      annotation TEXT,
+      year INTEGER,
+      tags TEXT
     )
-`)
+  `)
+} catch (error) {
+	console.error('Error initializing database:', error)
+	throw new Error('Failed to initialize database')
+}
 
 // db.prepare(
 // 	`
-//   INSERT INTO data (
+//   INSERT INTO books (
 // 			title,
 // 			totalVolumes,
 // 			currentVolume,
