@@ -5,6 +5,7 @@ import {
 	DialogTitle,
 	DialogDescription,
 } from '@/components/ui/dialog'
+
 import { useModal } from '@/hooks/useModal'
 
 export function ModalProvider() {
@@ -24,7 +25,14 @@ export function ModalProvider() {
 					<DialogTitle>{title}</DialogTitle>
 					{description && <DialogDescription>{description}</DialogDescription>}
 				</DialogHeader>
-				{Content && <Content {...contentProps} />}
+				<div
+					className='flex-1 overflow-y-auto'
+					style={{
+						paddingRight: '16px',
+					}}
+				>
+					{Content && <Content {...contentProps} />}
+				</div>
 			</DialogContent>
 		</Dialog>
 	)
