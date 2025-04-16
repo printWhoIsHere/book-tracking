@@ -1,8 +1,11 @@
 import { NavActions, NavPages } from '@/components/shared/Sidebar/nav-items'
-import { navActions, navPages } from '../navigation'
-import { Separator } from '@/components/ui/separator'
+import { navActions, navPages } from '@/components/shared/navigation'
+
+import { useSidebar } from '@/providers/sidebar-provider'
 
 export default function SidebarContent() {
+	const { open } = useSidebar()
+
 	return (
 		<div
 			data-sidebar='content'
@@ -10,9 +13,7 @@ export default function SidebarContent() {
 		>
 			<NavActions items={navActions} />
 
-			<Separator orientation='horizontal' className='mx-auto w-4' />
-
-			<NavPages pages={navPages} />
+			{open && <NavPages pages={navPages} />}
 		</div>
 	)
 }

@@ -1,23 +1,45 @@
 import {
-	navActionsProps,
-	navPagesProps,
 	SidebarGroup,
 	SidebarGroupLabel,
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from '@/components/shared/Sidebar'
+import { AddBookModal } from '@/components/modals'
+import { navActionsProps, navPagesProps } from '@/components/shared/navigation'
+
+import { useModal } from '@/hooks/useModal'
 
 export function NavActions({ items }: { items: navActionsProps[] }) {
+	const { openModal } = useModal()
+
+	const handleAction = (item: navActionsProps) => {
+		if (item.title === 'Добавить книгу') {
+			openModal(
+				AddBookModal,
+				'Добавить книгу',
+				'Введите информацию о новой книге',
+				{
+					onSubmit: (data) => {
+						console.log('Добавлена книга:', data)
+					},
+				},
+			)
+		} else {
+			item.action()
+		}
+	}
+
 	return (
 		<SidebarGroup>
-			<SidebarGroupLabel className='group-data-[state=collapsed]:hidden'>
-				Actions
-			</SidebarGroupLabel>
+			<SidebarGroupLabel>Actions</SidebarGroupLabel>
 			<SidebarMenu>
 				{items.map((item) => (
 					<SidebarMenuItem key={item.title}>
-						<SidebarMenuButton tooltip={item.title} onClick={item.action}>
+						<SidebarMenuButton
+							tooltip={item.title}
+							onClick={() => handleAction(item)}
+						>
 							{item.icon && <item.icon />}
 							<span className='group-data-[state=collapsed]:hidden'>
 								{item.title}
@@ -32,7 +54,7 @@ export function NavActions({ items }: { items: navActionsProps[] }) {
 
 export function NavPages({ pages }: { pages: navPagesProps[] }) {
 	return (
-		<SidebarGroup className='group-data-[state=collapsed]:hidden'>
+		<SidebarGroup className=''>
 			<SidebarGroupLabel>Pages</SidebarGroupLabel>
 			<SidebarMenu>
 				{pages.map((page) => (
