@@ -1,4 +1,5 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
+import type { Book } from 'src/types'
 
 declare global {
 	interface Window {
@@ -8,12 +9,12 @@ declare global {
 }
 
 interface API {
-	getAllData: () => Promise<Data[]>
-	getDataById: (key: number) => Promise<Data | null>
-	updateData: (key: number, value: any) => Promise<boolean>
-	addData: (value: any) => Promise<{ id: number }>
+	getAllBooks: () => Promise<Book[]>
+	getBookById: (id: number) => Promise<Book | undefined>
+	addBook: (book: Omit<Book, 'id'>) => Promise<{ id: number }>
+	updateBook: (id: number, field: string, value: any) => Promise<void>
+	removeBook: (id: number) => Promise<void>
 
-	removeData: (key: number) => Promise<boolean>
 	getSettings: () => Promise<Settings>
-	updateSettings: (settings: Partial<Settings>) => Promise<boolean>
+	updateSettings: (settings: Settings) => Promise<void>
 }
