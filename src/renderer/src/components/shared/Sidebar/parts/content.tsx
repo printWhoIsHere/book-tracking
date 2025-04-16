@@ -9,7 +9,7 @@ export default function SidebarContent() {
 	return (
 		<div
 			data-sidebar='content'
-			className='flex flex-1 flex-col min-h-0 gap-2 overflow-hidden'
+			className='flex flex-1 flex-col min-h-0 gap-2 overflow-y-auto'
 		>
 			<NavActions items={navActions} />
 
