@@ -1,7 +1,15 @@
+import Header from '@/components/shared/Header'
+import Sidebar, { SidebarInset } from '@/components/shared/Sidebar'
+
 export default function App(): JSX.Element {
 	return (
-		<div className='h-screen flex overflow-hidden'>
-			<h1>Hello World!</h1>
-		</div>
+		<>
+			<Sidebar />
+
+			<SidebarInset>
+				<Header />
+				<main className='p-4'>main</main>
+			</SidebarInset>
+		</>
 	)
 }
