@@ -1,11 +1,11 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { useSettings } from '@/hooks/useSettings'
+import { Settings } from 'src/types'
 
-type Theme = 'dark' | 'light' | 'system'
+export type Theme = Settings['general']['theme']
 
 type ThemeProviderProps = {
 	children: React.ReactNode
-	defaultTheme?: Theme
-	storageKey?: string
 }
 
 type ThemeProviderState = {
@@ -14,25 +14,24 @@ type ThemeProviderState = {
 }
 
 const initialState: ThemeProviderState = {
-	theme: 'dark',
+	theme: 'system',
 	setTheme: () => null,
 }
 
 const ThemeContext = createContext<ThemeProviderState>(initialState)
 
-export function ThemeProvider({
-	children,
-	defaultTheme = 'dark',
-	storageKey = 'theme',
-	...props
-}: ThemeProviderProps) {
-	const [theme, setTheme] = useState<Theme>(
-		() => (localStorage.getItem(storageKey) as Theme) || defaultTheme,
-	)
+export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
+	const { settings, updateSettings } = useSettings()
+	const [theme, setThemeState] = useState<Theme>('system')
+
+	useEffect(() => {
+		if (settings?.general?.theme) {
+			setThemeState(settings.general.theme)
+		}
+	}, [settings])
 
 	useEffect(() => {
 		const root = window.document.documentElement
-
 		root.classList.remove('light', 'dark')
 
 		if (theme === 'system') {
@@ -48,16 +47,21 @@ export function ThemeProvider({
 		root.classList.add(theme)
 	}, [theme])
 
-	const value = {
-		theme,
-		setTheme: (theme: Theme) => {
-			localStorage.setItem(storageKey, theme)
-			setTheme(theme)
-		},
+	const setTheme = (newTheme: Theme) => {
+		setThemeState(newTheme)
+		if (settings) {
+			updateSettings({
+				...settings,
+				general: {
+					...settings.general,
+					theme: newTheme,
+				},
+			})
+		}
 	}
 
 	return (
-		<ThemeContext.Provider {...props} value={value}>
+		<ThemeContext.Provider value={{ theme, setTheme }} {...props}>
 			{children}
 		</ThemeContext.Provider>
 	)

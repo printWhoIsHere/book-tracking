@@ -10,7 +10,8 @@ interface Book {
 	content?: string
 	annotation?: string
 	year?: number
-	tags?: string
+	tags?: string[]
+	isArchived?: boolean
 }
 
 interface Tag {
@@ -19,8 +20,8 @@ interface Tag {
 }
 
 interface Settings {
-	app: {
-		theme: 'light' | 'dark'
+	general: {
+		theme: 'light' | 'dark' | 'system'
 		defaultView: 'home' | 'table' | 'authors'
 	}
 	backups: {
@@ -33,10 +34,11 @@ interface Settings {
 		columnOrder: string[]
 		hiddenColumns: string[]
 		pageSize: number
-		rowHeight: 'compact' | 'standard'
+		rowHeight: 'compact' | 'default' | 'comfortable'
 	}
+	profiles: { name: string; quantity: number }[]
 	genres: string[]
 	tags: Tag[]
 }
 
-export { Book, Tags, Settings }
+export { Book, Tag, Settings }

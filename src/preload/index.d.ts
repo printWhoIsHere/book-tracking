@@ -1,5 +1,5 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
-import type { Book } from 'src/types'
+import type { Book, Settings } from 'src/types'
 
 declare global {
 	interface Window {
@@ -8,13 +8,33 @@ declare global {
 	}
 }
 
-interface API {
-	getAllBooks: () => Promise<Book[]>
-	getBookById: (id: number) => Promise<Book | undefined>
-	addBook: (book: Omit<Book, 'id'>) => Promise<{ id: number }>
-	updateBook: (id: number, field: string, value: any) => Promise<void>
-	removeBook: (id: number) => Promise<void>
+export interface API {
+	book: {
+		get: (id: number) => Promise<Book | null>
+		getAll: () => Promise<Book[]>
+		add: (
+			book: Omit<Book, 'id'>,
+		) => Promise<{ changes: number; lastInsertRowid: number }>
+		update: (id: number, updates: Partial<Book>) => Promise<{ changes: number }>
+		delete: (id: number) => Promise<{ changes: number }>
+		deleteMultiple: (ids: number[]) => Promise<{ changes: number }>
+		archive: (id: number) => Promise<{ changes: number }>
+		unarchive: (id: number) => Promise<{ changes: number }>
+	}
 
-	getSettings: () => Promise<Settings>
-	updateSettings: (settings: Settings) => Promise<void>
+	settings: {
+		get: () => Promise<Settings>
+		update: (settings: Settings) => Promise<void>
+	}
+
+	backup: {
+		create: () => Promise<string>
+		list: () => Promise<string[]>
+		restore: (backupFileName: string) => Promise<void>
+		delete: (backupFileName: string) => Promise<void>
+	}
+
+	export: {
+		booksToExcel: () => Promise<string>
+	}
 }

@@ -59,7 +59,7 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
 						} as React.CSSProperties
 					}
 					className={cn(
-						'group/sidebar-wrapper flex min-h-svh w-full bg-sidebar',
+						'group/sidebar-wrapper flex min-h-svh w-full bg-sidebar overflow-auto',
 					)}
 				>
 					{children}

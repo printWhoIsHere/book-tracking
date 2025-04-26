@@ -5,6 +5,7 @@ import icon from '../../resources/icon.png?asset'
 
 import './settings'
 import './ipc'
+import { maybeAutoBackup } from './database'
 
 function createWindow(): void {
 	const mainWindow = new BrowserWindow({
@@ -45,6 +46,7 @@ app.whenReady().then(() => {
 	})
 
 	createWindow()
+	maybeAutoBackup()
 
 	app.on('activate', function () {
 		if (BrowserWindow.getAllWindows().length === 0) createWindow()

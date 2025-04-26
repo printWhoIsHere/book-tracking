@@ -1,50 +1,65 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 import api from '@/lib/ipc'
-import type { Book } from 'src/types'
+import { useToast } from '@/hooks/useToast'
+
+import { Book } from 'src/types'
 
 export const useBooks = () => {
 	const queryClient = useQueryClient()
+	const { toast } = useToast()
 
-	// Получение всех книг
 	const {
 		data: books = [],
 		isLoading,
 		error,
 	} = useQuery<Book[], Error>({
 		queryKey: ['books'],
-		queryFn: api.getAllBooks,
+		queryFn: api.book.getAll,
 	})
 
-	// Добавление книги
 	const addBookMutation = useMutation({
-		mutationFn: api.addBook,
+		mutationFn: api.book.add,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['books'] })
+			toast({ description: 'Книга добавлена', variant: 'success' })
+		},
+		onError: () => {
+			toast({ description: 'Ошибка добавления книги', variant: 'destructive' })
 		},
 	})
 
-	// Обновление книги
 	const updateBookMutation = useMutation({
-		mutationFn: ({
-			id,
-			field,
-			value,
-		}: {
-			id: number
-			field: keyof Book
-			value: any
-		}) => api.updateBook(id, field, value),
+		mutationFn: ({ id, updates }: { id: number; updates: Partial<Book> }) =>
+			api.book.update(id, updates),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['books'] })
+			toast({ description: 'Книга обновлена', variant: 'success' })
+		},
+		onError: () => {
+			toast({ description: 'Ошибка обновления книги', variant: 'destructive' })
 		},
 	})
 
-	// Удаление книги
-	const removeBookMutation = useMutation({
-		mutationFn: api.removeBook,
+	const deleteBookMutation = useMutation({
+		mutationFn: api.book.delete,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['books'] })
+			toast({ description: 'Книга удалена', variant: 'warning' })
+		},
+		onError: () => {
+			toast({ description: 'Ошибка удаления книги', variant: 'destructive' })
+		},
+	})
+
+	const deleteBooksMutation = useMutation({
+		mutationFn: api.book.deleteMultiple,
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['books'] })
+			toast({ description: 'Книги удалены', variant: 'success' })
+		},
+		onError: () => {
+			toast({ description: 'Ошибка удаления книг', variant: 'destructive' })
 		},
 	})
 
@@ -52,11 +67,15 @@ export const useBooks = () => {
 		books,
 		isLoading,
 		error,
+
 		addBook: addBookMutation.mutate,
 		updateBook: updateBookMutation.mutate,
-		removeBook: removeBookMutation.mutate,
+		deleteBook: deleteBookMutation.mutate,
+		deleteBooks: deleteBooksMutation.mutate,
+
 		isAdding: addBookMutation.isPending,
 		isUpdating: updateBookMutation.isPending,
-		isRemoving: removeBookMutation.isPending,
+		isDeleting: deleteBookMutation.isPending,
+		isDeletingMultiple: deleteBooksMutation.isPending,
 	}
 }

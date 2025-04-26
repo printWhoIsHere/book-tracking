@@ -2,9 +2,9 @@ import { existsSync, writeFileSync } from 'fs'
 import { settingsPath } from './config'
 
 const createSettings = () => ({
-	app: {
+	general: {
 		theme: 'dark',
-		defaultView: 'table',
+		defaultView: 'home',
 	},
 	backups: {
 		autoBackup: true,
@@ -13,10 +13,21 @@ const createSettings = () => ({
 		lastBackup: null,
 	},
 	table: {
-		columnOrder: ['title', 'author', 'year', 'tags'],
-		hiddenColumns: ['annotation'],
+		columnOrder: [
+			'title',
+			'totalVolumes',
+			'currentVolume',
+			'lastName',
+			'firstName',
+			'middleName',
+			'genre',
+			'content',
+			'annotation',
+			'year',
+			'tags',
+		],
 		pageSize: 25,
-		rowHeight: 'compact',
+		rowHeight: 'default',
 	},
 	genres: ['Фантастика', 'Детектив', 'Роман', 'Научная литература'],
 	tags: [

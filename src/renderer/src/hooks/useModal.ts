@@ -1,21 +1,30 @@
 import { create } from 'zustand'
 
-interface ModalProps {
+type ModalComponent = React.ComponentType<any>
+
+interface BaseProps {
 	onClose?: () => void
+}
+
+interface ModalProps extends BaseProps {
 	[key: string]: any
 }
+
+export type ModalSize = 'small' | 'default' | 'fullscreen'
 
 interface ModalState {
 	isOpen: boolean
 	title: string
 	description?: string
-	content: React.ComponentType<ModalProps> | null
+	content: ModalComponent | null
+	size?: ModalSize
 	contentProps: ModalProps | null
-	openModal: (
-		content: React.ComponentType<ModalProps>,
+	openModal: <T extends ModalComponent>(
+		content: T,
 		title: string,
 		description?: string,
-		props?: ModalProps,
+		ModalSize?: ModalSize,
+		props?: React.ComponentProps<T> & ModalProps,
 	) => void
 	closeModal: () => void
 }
@@ -25,23 +34,41 @@ const useModal = create<ModalState>((set) => ({
 	title: '',
 	description: undefined,
 	content: null,
+	size: 'default',
 	contentProps: null,
-	openModal: (content, title, description, props = {}) =>
+	openModal: <T extends ModalComponent>(
+		content: T,
+		title: string,
+		description?: string,
+		size: ModalSize = 'default',
+		props?: Partial<React.ComponentProps<T>> & ModalProps,
+	) => {
+		if (!title) {
+			throw new Error('Модальное окно должно содержать заголовок (title).')
+		}
+
 		set({
 			isOpen: true,
 			content,
 			title,
 			description,
-			contentProps: { ...props, onClose: () => set({ isOpen: false }) },
-		}),
+			size,
+			contentProps: {
+				...(props ?? {}),
+				onClose: () => set({ isOpen: false }),
+			},
+		})
+	},
 	closeModal: () =>
 		set({
 			isOpen: false,
-			content: null,
 			title: '',
 			description: undefined,
+			content: null,
+			size: 'default',
 			contentProps: null,
 		}),
 }))
 
-export { useModal, type ModalProps }
+export { useModal }
+export type { ModalProps }
