@@ -5,8 +5,32 @@ import { join } from 'path'
 
 import { getAllBooks } from './book.service'
 
+function parseTags(tags: unknown): string[] {
+	if (typeof tags === 'string') {
+		try {
+			const parsedTags = JSON.parse(tags)
+			if (Array.isArray(parsedTags)) {
+				return parsedTags
+			}
+		} catch {
+			return [tags]
+		}
+	}
+
+	if (Array.isArray(tags)) {
+		return tags
+	}
+
+	return []
+}
+
 export async function exportBooksToExcel(): Promise<string> {
 	const books = await getAllBooks()
+
+	const processedBooks = books.map((book) => ({
+		...book,
+		tags: parseTags(book.tags),
+	}))
 
 	const { canceled, filePath } = await dialog.showSaveDialog({
 		title: 'Сохранить книги как...',
@@ -20,7 +44,7 @@ export async function exportBooksToExcel(): Promise<string> {
 
 	// Генерация Excel-файла
 	const workbook = xlsx.utils.book_new()
-	const worksheet = xlsx.utils.json_to_sheet(books)
+	const worksheet = xlsx.utils.json_to_sheet(processedBooks)
 	xlsx.utils.book_append_sheet(workbook, worksheet, 'Books')
 
 	const excelBuffer = xlsx.write(workbook, { bookType: 'xlsx', type: 'buffer' })

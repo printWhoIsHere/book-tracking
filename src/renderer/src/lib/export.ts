@@ -1,3 +1,4 @@
+import { toast } from '@/hooks/useToast'
 import api from './ipc'
 
 export async function exportBooks() {
@@ -5,7 +6,10 @@ export async function exportBooks() {
 		const filePath = await api.export.booksToExcel()
 		return filePath
 	} catch (error) {
-		console.error('Ошибка экспорта книг:', error)
+		toast({
+			description: 'Ошибка экспорта книг: ' + error,
+			variant: 'destructive',
+		})
 		throw error
 	}
 }

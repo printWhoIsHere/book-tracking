@@ -23,7 +23,7 @@ export function ModalProvider() {
 	if (!Content) return null
 
 	const sizeClasses = {
-		small: 'max-w-sm',
+		small: 'max-w-md',
 		default: 'min-w-[760px] min-h-[420px] max-h-[90vh] max-w-2xl',
 		fullscreen: 'w-[90vw] h-[90vh] sm:w-[70vw] sm:h-[70vh]',
 	}

@@ -10,6 +10,9 @@ export function BookTable() {
 	const { settings } = useSettings()
 	const { books, isLoading } = useBooks()
 
+	console.log('TAGS >>> ', books[0].tags)
+	console.log('TYPE >>> ', typeof books)
+
 	const columns = useMemo(
 		() => getColumns(settings?.table.hiddenColumns || []),
 		[settings?.table.hiddenColumns],

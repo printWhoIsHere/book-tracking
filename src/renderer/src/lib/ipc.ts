@@ -27,6 +27,10 @@ const api: API = {
 	export: {
 		booksToExcel: () => window.api.export.booksToExcel(),
 	},
+
+	import: {
+		booksFromExcel: (filePath) => window.api.import.booksFromExcel(filePath),
+	},
 }
 
 export default api

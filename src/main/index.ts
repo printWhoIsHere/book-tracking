@@ -1,11 +1,13 @@
 import { app, shell, BrowserWindow } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+
 import icon from '../../resources/icon.png?asset'
+
+import { maybeAutoBackup } from './database'
 
 import './settings'
 import './ipc'
-import { maybeAutoBackup } from './database'
 
 function createWindow(): void {
 	const mainWindow = new BrowserWindow({

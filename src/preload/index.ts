@@ -58,6 +58,11 @@ const api = {
 		booksToExcel: (): Promise<string> =>
 			ipcRenderer.invoke('export:booksToExcel'),
 	},
+
+	import: {
+		booksFromExcel: (filePath: string): Promise<void> =>
+			ipcRenderer.invoke('import:booksFromExcel', filePath),
+	},
 }
 
 if (process.contextIsolated) {

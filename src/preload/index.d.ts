@@ -37,4 +37,8 @@ export interface API {
 	export: {
 		booksToExcel: () => Promise<string>
 	}
+
+	import: {
+		booksFromExcel: (filePath: string) => Promise<void>
+	}
 }

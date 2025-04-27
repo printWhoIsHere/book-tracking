@@ -67,6 +67,7 @@ const navigation: NavGroup[] = [
 				modal: Modal.ImportModal,
 				modalTitle: 'Импорт данных',
 				modalDescription: 'Загрузите данные из Excel файла',
+				size: 'small',
 			},
 			{
 				title: 'Архивированные записи',
