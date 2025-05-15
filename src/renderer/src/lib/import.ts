@@ -1,17 +1,27 @@
 import { toast } from '@/hooks/useToast'
 import api from './ipc'
 
-export async function importBooks(formData: FormData) {
+export async function importBooks({
+	filePath,
+	profileName,
+	createNewProfile = false,
+}: {
+	filePath: string
+	profileName?: string
+	createNewProfile?: boolean
+}) {
 	try {
-		const uploadedFile = formData.get('file') as File
+		const count = await api.import.booksFromExcel({
+			filePath,
+			profileName,
+			createNewProfile,
+		})
 
-		if (!uploadedFile) {
-			throw new Error('Файл не найден в FormData')
-		}
+		toast({
+			description: `Импортировано книг: ${count}`,
+		})
 
-		console.log(uploadedFile.path)
-
-		return await api.import.booksFromExcel(uploadedFile.path)
+		return count
 	} catch (error) {
 		toast({
 			description: 'Ошибка импорта книг: ' + error,

@@ -7,43 +7,25 @@ import {
 } from '@/components/ui/dialog'
 
 import { useModal } from '@/hooks/useModal'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils'
 
 export function ModalProvider() {
-	const {
-		isOpen,
-		title,
-		description,
-		content: Content,
-		contentProps,
-		size,
-		closeModal,
-	} = useModal()
+	const { isOpen, title, description, Component, props, closeModal } =
+		useModal()
 
-	if (!Content) return null
-
-	const sizeClasses = {
-		small: 'max-w-md',
-		default: 'min-w-[760px] min-h-[420px] max-h-[90vh] max-w-2xl',
-		fullscreen: 'w-[90vw] h-[90vh] sm:w-[70vw] sm:h-[70vh]',
-	}
+	if (!Component) return null
 
 	return (
 		<Dialog open={isOpen} onOpenChange={closeModal}>
 			<DialogContent
-				className={cn(
-					'flex flex-col rounded-2xl',
-					sizeClasses[size ?? 'default'],
-				)}
+				className={cn('flex flex-col rounded-2xl sm:max-w-[625px]')}
 			>
-				<DialogHeader>
+				<DialogHeader className='mb-2'>
 					<DialogTitle>{title}</DialogTitle>
 					{description && <DialogDescription>{description}</DialogDescription>}
 				</DialogHeader>
 
-				<div className='h-full flex-1 overflow-auto mt-4 p-1'>
-					<Content {...contentProps} />
-				</div>
+				<Component {...props} onClose={closeModal} />
 			</DialogContent>
 		</Dialog>
 	)

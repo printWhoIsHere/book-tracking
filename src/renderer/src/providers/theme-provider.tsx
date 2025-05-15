@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useSettings } from '@/hooks/useSettings'
-import { Settings } from 'src/types'
 
 export type Theme = Settings['general']['theme']
 
@@ -21,7 +20,7 @@ const initialState: ThemeProviderState = {
 const ThemeContext = createContext<ThemeProviderState>(initialState)
 
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
-	const { settings, updateSettings } = useSettings()
+	const { settings, setSettings: updateSettings } = useSettings()
 	const [theme, setThemeState] = useState<Theme>('system')
 
 	useEffect(() => {

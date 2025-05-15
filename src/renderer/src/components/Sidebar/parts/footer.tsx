@@ -1,4 +1,4 @@
-import ProfileSwitcher from '../profile-switcher'
+import ProfileSwitcher from '@/components/profile/switcher'
 
 export default function SidebarFooter() {
 	return (

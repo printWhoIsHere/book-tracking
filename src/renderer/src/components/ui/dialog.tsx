@@ -2,7 +2,7 @@ import * as React from 'react'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { X } from 'lucide-react'
 
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils'
 
 const Dialog = DialogPrimitive.Root
 const DialogTrigger = DialogPrimitive.Trigger
@@ -41,7 +41,7 @@ const DialogContent = React.forwardRef<
 					data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95
 					data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%]
 					data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]
-					flex flex-col max-w-lg overflow-hidden`,
+					flex flex-col overflow-hidden`,
 					className,
 				)}
 				{...props}

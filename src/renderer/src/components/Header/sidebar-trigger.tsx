@@ -1,7 +1,6 @@
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
-
 import { useSidebar } from '@/providers/sidebar-provider'
 
 export function SidebarTrigger({

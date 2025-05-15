@@ -5,7 +5,7 @@ import {
 	CommandEmpty,
 	CommandList,
 } from '@/components/ui/command'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils'
 import { Command as CommandPrimitive } from 'cmdk'
 import { X as RemoveIcon, Check } from 'lucide-react'
 import React, {
@@ -268,7 +268,7 @@ MultiSelectorTrigger.displayName = 'MultiSelectorTrigger'
 const MultiSelectorInput = forwardRef<
 	React.ElementRef<typeof CommandPrimitive.Input>,
 	React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
->(({ className, ...props }, ref) => {
+>(({ className, ...props }) => {
 	const {
 		setOpen,
 		inputValue,
@@ -278,8 +278,6 @@ const MultiSelectorInput = forwardRef<
 		handleSelect,
 		ref: inputRef,
 	} = useMultiSelect()
-
-	const parsedValues = JSON.parse(inputValue || '[]') as string[]
 
 	return (
 		<CommandPrimitive.Input

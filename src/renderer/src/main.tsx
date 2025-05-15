@@ -4,7 +4,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import '@/assets/global.css'
 
+import { AppInitProvider } from '@/providers/app-init-provider'
 import { ThemeProvider } from '@/providers/theme-provider'
+import { TableProvider } from '@/providers/table-provider'
 import { SidebarProvider } from '@/providers/sidebar-provider'
 import { ModalProvider } from '@/providers/modal-provider'
 
@@ -22,12 +24,16 @@ const queryClient = new QueryClient({
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<React.StrictMode>
 		<QueryClientProvider client={queryClient}>
-			<ThemeProvider>
-				<SidebarProvider>
-					<ModalProvider />
-					<App />
-				</SidebarProvider>
-			</ThemeProvider>
+			<AppInitProvider>
+				<ThemeProvider>
+					<TableProvider>
+						<SidebarProvider>
+							<ModalProvider />
+							<App />
+						</SidebarProvider>
+					</TableProvider>
+				</ThemeProvider>
+			</AppInitProvider>
 		</QueryClientProvider>
 	</React.StrictMode>,
 )

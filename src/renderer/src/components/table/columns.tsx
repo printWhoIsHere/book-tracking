@@ -1,103 +1,92 @@
-import { ColumnDef } from '@tanstack/react-table'
-import { ArrowUpDown } from 'lucide-react'
+import { createColumnHelper } from '@tanstack/react-table'
 
-import { Button } from '@/components/ui/button'
-import { RowSelect, RowTags, RowActions } from '@/components/table/rows'
+import { CellActions, CellSelect, CellTags } from './cells'
+import { SortableHeader } from './headers'
+import { MenuHeader } from './headers/menu'
+import { formatFullName } from '@/utils'
 
-import { Book } from 'src/types'
-import { formatFullName } from '@/lib/utils'
+const columnHelper = createColumnHelper<Book>()
 
-export function getColumns(hidden: string[]): ColumnDef<Book>[] {
-	const baseColumns: (ColumnDef<Book> | false)[] = [
+export const columns = [
+	columnHelper.display({
+		id: 'select',
+		cell: ({ row }) => <CellSelect row={row} />,
+		enableSorting: false,
+		enableHiding: false,
+		minSize: 60,
+		maxSize: 60,
+		size: 60,
+	}),
+
+	columnHelper.accessor('title', {
+		header: (info) => <SortableHeader info={info} name='Название' />,
+		cell: (info) => info.getValue(),
+		minSize: 160,
+	}),
+
+	columnHelper.accessor('totalVolumes', {
+		header: (info) => <MenuHeader info={info} name='Т' />,
+		cell: (info) => info.getValue(),
+		minSize: 60,
+		maxSize: 60,
+	}),
+
+	columnHelper.accessor('currentVolume', {
+		header: (info) => <MenuHeader info={info} name='№' />,
+		cell: (info) => info.getValue(),
+		minSize: 60,
+		maxSize: 60,
+	}),
+
+	columnHelper.accessor(
+		(row) => formatFullName(row.lastName, row.firstName, row.middleName),
 		{
-			id: 'select',
-			cell: ({ row }) => <RowSelect row={row} />,
-			enableSorting: false,
-			enableHiding: false,
-		},
-
-		!hidden.includes('title') && {
-			id: 'title',
-			accessorKey: 'title',
-			header: ({ column }) => (
-				<Button
-					variant='ghost'
-					className='hover:bg-transparent'
-					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				>
-					Название
-					<ArrowUpDown />
-				</Button>
-			),
-		},
-
-		!hidden.includes('totalVolumes') && {
-			id: 'totalVolumes',
-			accessorKey: 'totalVolumes',
-			header: 'Т',
-			size: 10,
-		},
-
-		!hidden.includes('currentVolume') && {
-			id: 'currentVolume',
-			accessorKey: 'currentVolume',
-			header: '№',
-			size: 10,
-		},
-
-		// TODO: Определить как скрывать поле по ФИО
-		!hidden.includes('author') && {
 			id: 'author',
-			accessorFn: (row) =>
-				formatFullName(row.lastName, row.firstName, row.middleName),
-			header: ({ column }) => (
-				<Button
-					variant='ghost'
-					className='hover:bg-transparent'
-					onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-				>
-					Автор
-					<ArrowUpDown />
-				</Button>
-			),
+			header: (info) => <SortableHeader info={info} name='Автор' />,
+			cell: (info) => info.getValue(),
+			minSize: 160,
 		},
+	),
 
-		!hidden.includes('genre') && {
-			id: 'genre',
-			accessorKey: 'genre',
-			header: 'Жанр',
-		},
+	columnHelper.accessor('genre', {
+		header: (info) => <SortableHeader info={info} name='Жанр' />,
+		cell: (info) => info.getValue(),
+		minSize: 160,
+	}),
 
-		!hidden.includes('content') && {
-			id: 'content',
-			accessorKey: 'content',
-			header: 'Содержание',
-		},
+	columnHelper.accessor('content', {
+		header: (info) => <MenuHeader info={info} name='Содержание' />,
+		cell: (info) => info.getValue(),
+		minSize: 160,
+	}),
 
-		!hidden.includes('annotation') && {
-			id: 'annotation',
-			accessorKey: 'annotation',
-			header: 'Аннотация',
-		},
+	columnHelper.accessor('annotation', {
+		header: (info) => <MenuHeader info={info} name='Аннотация' />,
+		cell: (info) => info.getValue(),
+		minSize: 160,
+	}),
 
-		!hidden.includes('year') && {
-			id: 'year',
-			accessorKey: 'year',
-			header: 'Год',
-		},
+	columnHelper.accessor('year', {
+		header: (info) => <MenuHeader info={info} name='Год' />,
+		cell: (info) => info.getValue(),
+		maxSize: 60,
+		minSize: 60,
+		size: 60,
+	}),
 
-		!hidden.includes('tags') && {
-			id: 'tags',
-			accessorKey: 'tags',
-			header: 'Ярлыки',
-			cell: ({ row }) => <RowTags row={row} />,
-		},
+	columnHelper.accessor('tags', {
+		header: (info) => <MenuHeader info={info} name='Ярлыки' />,
+		cell: ({ row }) => <CellTags row={row} />,
+		minSize: 160,
+	}),
 
-		{
-			id: 'actions',
-			cell: ({ row }) => <RowActions row={row} />,
-		},
-	]
-
-	return baseColumns.filter(Boolean) as ColumnDef<Book>[]
-}
+	columnHelper.display({
+		id: 'actions',
+		cell: ({ row }) => <CellActions row={row} />,
+		enableSorting: false,
+		enableHiding: false,
+		minSize: 64,
+		maxSize: 64,
+		size: 64,
+	}),
+]

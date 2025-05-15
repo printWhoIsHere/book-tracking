@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils'
 
 import { useSidebar } from '@/providers/sidebar-provider'
 
@@ -10,21 +10,11 @@ import {
 	SheetTitle,
 } from '@/components/ui/sheet'
 
-import SidebarHeader from './parts/header'
-import SidebarContent from './parts/content'
-import SidebarFooter from './parts/footer'
+import SidebarHeader from '@/components/sidebar/parts/header'
+import SidebarContent from '@/components/sidebar/parts/content'
+import SidebarFooter from '@/components/sidebar/parts/footer'
 
 export default function Sidebar() {
-	return (
-		<SidebarWrapper>
-			<SidebarHeader />
-			<SidebarContent />
-			<SidebarFooter />
-		</SidebarWrapper>
-	)
-}
-
-const SidebarWrapper = ({ children }: React.ComponentProps<'div'>) => {
 	const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
 
 	if (isMobile) {
@@ -40,7 +30,11 @@ const SidebarWrapper = ({ children }: React.ComponentProps<'div'>) => {
 						<SheetTitle>Sidebar</SheetTitle>
 						<SheetDescription>Mobile navigation panel</SheetDescription>
 					</SheetHeader>
-					<div className='flex h-full w-full flex-col'>{children}</div>
+					<div className='flex h-full w-full flex-col'>
+						<SidebarHeader />
+						<SidebarContent />
+						<SidebarFooter />
+					</div>
 				</SheetContent>
 			</Sheet>
 		)
@@ -75,7 +69,9 @@ const SidebarWrapper = ({ children }: React.ComponentProps<'div'>) => {
 					data-state={state}
 					className='group flex h-full w-full flex-col bg-sidebar'
 				>
-					{children}
+					<SidebarHeader />
+					<SidebarContent />
+					<SidebarFooter />
 				</div>
 			</div>
 		</div>

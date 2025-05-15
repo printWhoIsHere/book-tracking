@@ -1,6 +1,5 @@
-import { NavItems } from '@/components/Sidebar/nav-items'
+import { NavItems } from '@/components/sidebar/nav-items'
 import { navigation } from '@/navigation'
-
 import { useSidebar } from '@/providers/sidebar-provider'
 
 export default function SidebarContent() {

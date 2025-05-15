@@ -3,18 +3,17 @@ import {
 	Plus,
 	Upload,
 	Download,
-	Archive,
 	Sliders,
 	Table,
 	RotateCcw,
 	Tags,
 	BookOpenCheck,
+	Trash,
 } from 'lucide-react'
 import { VariantProps } from 'class-variance-authority'
 
-import * as Modal from '@/components/modals'
 import type { buttonVariants } from '@/components/ui/button'
-import type { ModalSize } from '@/hooks/useModal'
+import * as Modal from '@/components/modals'
 
 interface BaseNavItem {
 	title: string
@@ -23,18 +22,16 @@ interface BaseNavItem {
 }
 
 interface ModalNavItem extends BaseNavItem {
+	kind: 'modal'
 	modal: React.ComponentType<any>
 	modalTitle: string
 	modalDescription?: string
-	size?: ModalSize
-	actionKey?: never
+	modalProps?: Record<string, unknown>
 }
 
 interface ActionNavItem extends BaseNavItem {
+	kind: 'action'
 	actionKey: string
-	modal?: never
-	modalTitle?: never
-	modalDescription?: never
 }
 
 type NavItem = ModalNavItem | ActionNavItem
@@ -49,30 +46,34 @@ const navigation: NavGroup[] = [
 		group: 'actions',
 		items: [
 			{
+				kind: 'modal',
 				title: 'Добавить книгу',
 				icon: Plus,
+				variant: 'secondary',
 				modal: Modal.BookFormModal,
 				modalTitle: 'Добавить книгу',
 				modalDescription: 'Введите информацию о новой книге',
-				variant: 'secondary',
 			},
 			{
+				kind: 'action',
 				title: 'Экспорт данных',
 				icon: Upload,
 				actionKey: 'exportBooks',
 			},
 			{
+				kind: 'modal',
 				title: 'Импорт данных',
 				icon: Download,
-				modal: Modal.ImportModal,
+				modal: Modal.BookFormModal,
 				modalTitle: 'Импорт данных',
 				modalDescription: 'Загрузите данные из Excel файла',
-				size: 'small',
 			},
 			{
-				title: 'Архивированные записи',
-				icon: Archive,
-				actionKey: 'toggleArchive',
+				kind: 'action',
+				title: 'Удалить выбранные книги',
+				icon: Trash,
+				variant: 'destructive',
+				actionKey: 'deleteSelected',
 			},
 		],
 	},
@@ -80,35 +81,40 @@ const navigation: NavGroup[] = [
 		group: 'settings',
 		items: [
 			{
-				title: 'General',
+				kind: 'modal',
+				title: 'Общие',
 				icon: Sliders,
 				modal: Modal.GeneralSettingsModal,
 				modalTitle: 'Общие настройки',
 				modalDescription: 'Настройка темы, вида и интерфейса приложения',
 			},
 			{
-				title: 'Table',
+				kind: 'modal',
+				title: 'Таблица',
 				icon: Table,
 				modal: Modal.TableSettingsModal,
 				modalTitle: 'Настройки таблицы',
 				modalDescription: 'Конфигурация отображения таблицы и колонок',
 			},
 			{
-				title: 'Backups',
+				kind: 'modal',
+				title: 'Бэкапы',
 				icon: RotateCcw,
-				modal: Modal.BackupsSettingsModal,
+				modal: Modal.BackupSettingsModal,
 				modalTitle: 'Резервные копии',
 				modalDescription: 'Настройка автоматического резервного копирования',
 			},
 			{
-				title: 'Genres',
+				kind: 'modal',
+				title: 'Жанры',
 				icon: BookOpenCheck,
 				modal: Modal.GenresSettingsModal,
 				modalTitle: 'Настройка жанров',
 				modalDescription: 'Добавьте, измените или удалите жанры книг',
 			},
 			{
-				title: 'Tags',
+				kind: 'modal',
+				title: 'Ярлыки',
 				icon: Tags,
 				modal: Modal.TagsSettingsModal,
 				modalTitle: 'Настройка тегов',

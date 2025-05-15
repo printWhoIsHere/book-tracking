@@ -1,30 +1,21 @@
 import { create } from 'zustand'
 
-type ModalComponent = React.ComponentType<any>
-
-interface BaseProps {
-	onClose?: () => void
-}
-
-interface ModalProps extends BaseProps {
-	[key: string]: any
-}
-
-export type ModalSize = 'small' | 'default' | 'fullscreen'
+export type ModalComponent<P extends ModalProps = ModalProps> =
+	React.ComponentType<P>
 
 interface ModalState {
 	isOpen: boolean
 	title: string
 	description?: string
-	content: ModalComponent | null
-	size?: ModalSize
-	contentProps: ModalProps | null
-	openModal: <T extends ModalComponent>(
-		content: T,
-		title: string,
-		description?: string,
-		ModalSize?: ModalSize,
-		props?: React.ComponentProps<T> & ModalProps,
+	Component?: ModalComponent<any>
+	props: ModalProps
+	openModal: <T extends ModalProps>(
+		Component: ModalComponent<T>,
+		options: {
+			title: string
+			description?: string
+			props?: Omit<T, 'onClose'>
+		},
 	) => void
 	closeModal: () => void
 }
@@ -33,29 +24,19 @@ const useModal = create<ModalState>((set) => ({
 	isOpen: false,
 	title: '',
 	description: undefined,
-	content: null,
-	size: 'default',
-	contentProps: null,
-	openModal: <T extends ModalComponent>(
-		content: T,
-		title: string,
-		description?: string,
-		size: ModalSize = 'default',
-		props?: Partial<React.ComponentProps<T>> & ModalProps,
-	) => {
-		if (!title) {
-			throw new Error('Модальное окно должно содержать заголовок (title).')
-		}
+	Component: undefined,
+	props: {} as any,
+	openModal: (Component, { title, description, props = {} }) => {
+		if (!title) throw new Error('Modal must have a title')
 
 		set({
 			isOpen: true,
-			content,
+			Component,
 			title,
 			description,
-			size,
-			contentProps: {
-				...(props ?? {}),
-				onClose: () => set({ isOpen: false }),
+			props: {
+				...props,
+				onClose: () => useModal.getState().closeModal(),
 			},
 		})
 	},
@@ -64,11 +45,9 @@ const useModal = create<ModalState>((set) => ({
 			isOpen: false,
 			title: '',
 			description: undefined,
-			content: null,
-			size: 'default',
-			contentProps: null,
+			Component: undefined,
+			props: {} as any,
 		}),
 }))
 
 export { useModal }
-export type { ModalProps }

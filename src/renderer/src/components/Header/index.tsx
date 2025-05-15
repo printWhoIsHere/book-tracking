@@ -1,6 +1,7 @@
 import { Separator } from '@/components/ui/separator'
-import { Skeleton } from '@/components/ui/skeleton'
-import { SidebarTrigger } from '@/components/Header/sidebar-trigger'
+import { SidebarTrigger } from '@/components/header/sidebar-trigger'
+import { SearchInput } from '@/components/header/search-panel/search-input'
+import { SearchToggleButtons } from '@/components/header/search-panel/search-toggle-buttons'
 
 export default function Header() {
 	return (
@@ -11,11 +12,9 @@ export default function Header() {
 				<h1 className='text-base font-medium'>Book Management</h1>
 			</div>
 			<div className='flex gap-2 px-4'>
-				<Skeleton className='h-8 w-8' />
-				<Skeleton className='h-8 w-8' />
-				<Skeleton className='h-8 w-8' />
+				<SearchToggleButtons />
 
-				<Skeleton className='h-8 w-80' />
+				<SearchInput />
 			</div>
 		</header>
 	)

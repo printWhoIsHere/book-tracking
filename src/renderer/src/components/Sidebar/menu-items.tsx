@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/tooltip'
 import { buttonVariants } from '@/components/ui/button'
 
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils'
 import { useSidebar } from '@/providers/sidebar-provider'
 import { VariantProps } from 'class-variance-authority'
 

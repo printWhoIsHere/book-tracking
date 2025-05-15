@@ -1,35 +1,47 @@
-import { API } from 'src/preload/index.d'
+import { API } from 'preload/index.d'
+
+const createApiMethod = <T extends (...args: any[]) => Promise<unknown>>(
+	fn: T,
+): T => fn
 
 const api: API = {
 	book: {
-		get: (id) => window.api.book.get(id),
-		getAll: () => window.api.book.getAll(),
-		add: (book) => window.api.book.add(book),
-		update: (id, updates) => window.api.book.update(id, updates),
-		delete: (id) => window.api.book.delete(id),
-		deleteMultiple: (ids) => window.api.book.deleteMultiple(ids),
-		archive: (id) => window.api.book.archive(id),
-		unarchive: (id) => window.api.book.unarchive(id),
-	},
-
-	settings: {
-		get: () => window.api.settings.get(),
-		update: (settings) => window.api.settings.update(settings),
+		get: createApiMethod(window.api.book.get),
+		getAll: createApiMethod(window.api.book.getAll),
+		add: createApiMethod(window.api.book.add),
+		update: createApiMethod(window.api.book.update),
+		delete: createApiMethod(window.api.book.delete),
+		deleteMany: createApiMethod(window.api.book.deleteMany),
 	},
 
 	backup: {
-		create: () => window.api.backup.create(),
-		list: () => window.api.backup.list(),
-		restore: (backupFileName) => window.api.backup.restore(backupFileName),
-		delete: (backupFileName) => window.api.backup.delete(backupFileName),
+		list: createApiMethod(window.api.backup.list),
+		create: createApiMethod(window.api.backup.create),
+		restore: createApiMethod(window.api.backup.restore),
+		delete: createApiMethod(window.api.backup.delete),
 	},
 
-	export: {
-		booksToExcel: () => window.api.export.booksToExcel(),
+	profile: {
+		getActive: createApiMethod(window.api.profile.getActive),
+		list: createApiMethod(window.api.profile.list),
+		add: createApiMethod(window.api.profile.add),
+		delete: createApiMethod(window.api.profile.delete),
+		switch: createApiMethod(window.api.profile.switch),
+		rename: createApiMethod(window.api.profile.rename),
+	},
+
+	settings: {
+		get: createApiMethod(window.api.settings.get),
+		set: createApiMethod(window.api.settings.set),
+		reset: createApiMethod(window.api.settings.reset),
 	},
 
 	import: {
-		booksFromExcel: (filePath) => window.api.import.booksFromExcel(filePath),
+		booksFromExcel: createApiMethod(window.api.import.booksFromExcel),
+	},
+
+	export: {
+		booksToExcel: createApiMethod(window.api.export.booksToExcel),
 	},
 }
 

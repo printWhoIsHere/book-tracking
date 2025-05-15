@@ -1,45 +1,43 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
 import api from '@/lib/ipc'
-import { useToast } from '@/hooks/useToast'
+import { useTypedMutation } from '@/hooks/useTypedMutation'
 
-import { Settings } from 'src/types'
+const SETTINGS_QUERY_KEY = ['settings']
 
 export const useSettings = () => {
-	const queryClient = useQueryClient()
-	const { toast } = useToast()
-
-	// Получение настроек
 	const {
 		data: settings,
 		isLoading,
 		error,
+		refetch,
 	} = useQuery<Settings, Error>({
-		queryKey: ['settings'],
+		queryKey: SETTINGS_QUERY_KEY,
 		queryFn: api.settings.get,
 	})
 
-	// Обновление настроек
-	const updateSettingsMutation = useMutation({
-		mutationFn: api.settings.update,
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['settings'] })
-			toast({ description: 'Настройки сохранены', variant: 'success' })
-		},
-		onError: () => {
-			toast({
-				description: 'Ошибка при сохранении настроек',
-				variant: 'destructive',
-			})
-		},
+	const setSettingsMutation = useTypedMutation<Settings>(api.settings.set, {
+		queryKey: SETTINGS_QUERY_KEY,
+		successMessage: 'Настройки сохранены',
+		errorMessage: 'Ошибка при сохранении настроек',
+	})
+
+	const resetSettingsMutation = useTypedMutation(api.settings.reset, {
+		queryKey: SETTINGS_QUERY_KEY,
+		successMessage: 'Настройки сброшены',
+		errorMessage: 'Ошибка сброса настроек',
 	})
 
 	return {
-		settings,
+		settings: settings!,
 		isLoading,
 		error,
+		refetch,
 
-		updateSettings: updateSettingsMutation.mutate,
-		isUpdating: updateSettingsMutation.isPending,
+		setSettings: setSettingsMutation.mutate,
+		resetSettings: resetSettingsMutation.mutate,
+
+		isUpdating: setSettingsMutation.isPending,
+		isResetting: resetSettingsMutation.isPending,
 	}
 }
